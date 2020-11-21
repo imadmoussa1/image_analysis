@@ -1,0 +1,9 @@
+compressed_files
+data_set
+pretrained_model
+*.zip
+*.tar
+*.gz
+new_data
+test_data
+.vscode/
