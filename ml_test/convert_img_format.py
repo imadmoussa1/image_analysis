@@ -12,3 +12,13 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.png")):
   # # Save .jpg image
   cv2.imwrite(new_file_name, image, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
   os.remove(f)
+
+
+for f in glob.glob(os.path.join(faces_folder_path, "*.jpeg")):
+  print("Processing file: {}".format(f))
+  # Load .png image
+  image = cv2.imread(f)
+  new_file_name = f.replace("jpeg", "jpg")
+  # # Save .jpg image
+  cv2.imwrite(new_file_name, image, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+  os.remove(f)
