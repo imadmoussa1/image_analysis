@@ -62,29 +62,42 @@ facerec = dlib.face_recognition_model_v1(face_rec_model_path)
 descriptors = []
 images = []
 
+win = dlib.image_window()
+
 # Now find all the faces and compute 128D face descriptors for each face.
 for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
-    print("Processing file: {}".format(f))
-    img = dlib.load_rgb_image(f)
+  print("Processing file: {}".format(f))
+  img = dlib.load_rgb_image(f)
 
-    # Ask the detector to find the bounding boxes of each face. The 1 in the
-    # second argument indicates that we should upsample the image 1 time. This
-    # will make everything bigger and allow us to detect more faces.
-    dets = detector(img, 1)
-    print("Number of faces detected: {}".format(len(dets)))
+  win.clear_overlay()
+  win.set_image(img)
 
-    # Now process each face we found.
-    for k, d in enumerate(dets):
-        # Get the landmarks/parts for the face in box d.
-        shape = sp(img, d)
+  # Ask the detector to find the bounding boxes of each face. The 1 in the
+  # second argument indicates that we should upsample the image 1 time. This
+  # will make everything bigger and allow us to detect more faces.
+  dets = detector(img, 1)
+  print("Number of faces detected: {}".format(len(dets)))
 
-        # Compute the 128D vector that describes the face in img identified by
-        # shape.  
-        face_descriptor = facerec.compute_face_descriptor(img, shape)
-        descriptors.append(face_descriptor)
-        images.append((img, shape))
+  # Now process each face we found.
+  for k, d in enumerate(dets):
+    print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
+        k, d.left(), d.top(), d.right(), d.bottom()))
+    # Get the landmarks/parts for the face in box d.
+    shape = sp(img, d)
 
-# Now let's cluster the faces.  
+    # Draw the face landmarks on the screen so we can see what face is currently being processed.
+    win.add_overlay(d)
+    win.add_overlay(shape)
+    # Compute the 128D vector that describes the face in img identified by
+    # shape.
+    face_descriptor = facerec.compute_face_descriptor(img, shape)
+    descriptors.append(face_descriptor)
+    img_name = os.path.basename(f).replace(".jpg", "")
+    images.append((img, shape, img_name))
+  win.add_overlay(dets)
+  # dlib.hit_enter_to_continue()
+
+# Now let's cluster the faces.
 labels = dlib.chinese_whispers_clustering(descriptors, 0.5)
 print(labels)
 num_classes = len(set(labels))
@@ -94,30 +107,30 @@ print("Number of clusters: {}".format(num_classes))
 biggest_classes = []
 biggest_class_length = 1
 for i in range(0, num_classes):
-    class_length = len([label for label in labels if label == i])
+  class_length = len([label for label in labels if label == i])
 
-    if class_length > biggest_class_length:
-        # print("cluster id number: {}".format(biggest_class))
-        # print("Number of faces in biggest cluster: {}".format(class_length))
-        biggest_classes.append(i)
+  if class_length > biggest_class_length:
+    # print("cluster id number: {}".format(biggest_class))
+    # print("Number of faces in biggest cluster: {}".format(class_length))
+    biggest_classes.append(i)
 
 for biggest_class in biggest_classes:
-    # Find the indices for the biggest class
-    indices = []
-    for i, label in enumerate(labels):
-        if label == biggest_class:
-            indices.append(i)
+  # Find the indices for the biggest class
+  indices = []
+  for i, label in enumerate(labels):
+    if label == biggest_class:
+      indices.append(i)
 
-    print("Indices of images in the biggest cluster: {}".format(str(indices)))
-    cluster_path = os.path.join(output_folder_path, str(biggest_class))
-    # Ensure output directory exists
-    if not os.path.isdir(cluster_path):
-        os.makedirs(cluster_path)
+  print("Indices of images in the biggest cluster: {}".format(str(indices)))
+  cluster_path = os.path.join(output_folder_path, str(biggest_class))
+  # Ensure output directory exists
+  if not os.path.isdir(cluster_path):
+    os.makedirs(cluster_path)
 
-    # Save the extracted faces
-    print("Saving faces in largest cluster to output folder...")
-    for i, index in enumerate(indices):
-        img, shape = images[index]
-        file_path = os.path.join(cluster_path, "face_" + str(i))
-        # The size and padding arguments are optional with default size=150x150 and padding=0.25
-        dlib.save_face_chip(img, shape, file_path, size=150, padding=0.25)
+  # Save the extracted faces
+  print("Saving faces in largest cluster to output folder...")
+  for i, index in enumerate(indices):
+    img, shape, img_name = images[index]
+    file_path = os.path.join(cluster_path, str(img_name)+"_face_" + str(i))
+    # The size and padding arguments are optional with default size=150x150 and padding=0.25
+    dlib.save_face_chip(img, shape, file_path, size=150, padding=0.25)
