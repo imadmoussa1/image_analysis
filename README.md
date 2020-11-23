@@ -1,6 +1,7 @@
 # Image analysis
 Project to Analysis images using different computer vision Algorithm. to able to get all the info from an image.
 And save them to a DB
+[Article: Computer vision projects](https://www.analyticsvidhya.com/blog/2020/09/18-open-source-computer-vision-projects-beginners/)
 
 ## Targets
 1) [Object Detection](#Object-Detection)
@@ -36,9 +37,10 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
 
 ## Models
 ### Object Detection
-1) https://github.com/hunglc007/tensorflow-yolov4-tflite
-1) https://github.com/hunglc007/tensorflow-yolov4-tflite/blob/master/detect.py
-2) https://github.com/tensorflow/models/tree/master/research/object_detection
+- [ ] [YOLOv4](https://github.com/AlexeyAB/darknet)
+- [X] [tensorflow yolov4](https://github.com/hunglc007/tensorflow-yolov4-tflite)
+- [ ] [Object Detection API TF2](https://github.com/tensorflow/models/tree/master/research/object_detection)
+- [ ] [DERT](https://arxiv.org/pdf/2005.12872.pdf)
 
 ### Image Captioning
 1) Mutli Task : https://www.ijcai.org/Proceedings/2018/0168.pdf (paper), https://github.com/andyweizhao/Multitask_Image_Captioning (code)
@@ -46,19 +48,21 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
 
 ### Face Clustering
 - [x] [dlib](http://dlib.net/)
+- [ ] [face_recognition](https://github.com/ageitgey/face_recognition)
 #### Ref:
   - [dlib tutorial and example](https://sefiks.com/2020/07/11/face-recognition-with-dlib-in-python/)
 
 ### Face recognition
 - [x] [Deepface](https://github.com/serengil/deepface)
 - [ ] [Insightface](https://github.com/deepinsight/insightface) (ArcFace with LResNet100E-IR)
-- [ ] [face_recognition](https://github.com/ageitgey/face_recognition)
 #### Ref:
   - [deepface tutorial](https://sefiks.com/2020/09/09/deep-face-detection-with-mtcnn-in-python/)
 
 ### OCR
 
 ### Detect image properties
+https://github.com/tensorflow/models/tree/master/research/delf#delg
+
 
 ### Assign general image attributes
 
