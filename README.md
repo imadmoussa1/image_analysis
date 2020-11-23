@@ -4,14 +4,15 @@ And save them to a DB
 [Article: Computer vision projects](https://www.analyticsvidhya.com/blog/2020/09/18-open-source-computer-vision-projects-beginners/)
 
 ## Targets
-1) [Object Detection](#Object-Detection)
-2) [Image Captioning](#Image-Captioning)
-6) [Face Clustering](Face-Clustering)
-5) [Face Recognition](#Face-recognition)
-7) [OCR](#OCR)
-8) Reverse Image search
-3) [Detect image properties](#Detect-image-properties)
-1) [Assign general image attributes](#Assign-general-image-attributes)
+1) [X] [Object Detection](#Object-Detection)
+2) [ ] [Deep Labelling for Semantic Image Segmentation](#Deep-Labelling-for-Semantic-Image-Segmentation)
+2) [ ] [Image Captioning](#Image-Captioning)
+6) [X] [Face Clustering](Face-Clustering)
+5) [X] [Face Recognition](#Face-recognition)
+7) [X] [OCR](#OCR)
+8) [ ] Reverse Image search
+3) [ ] [Detect image properties](#Detect-image-properties)
+1) [ ] [Assign general image attributes](#Assign-general-image-attributes)
 
 ## System
 A micro service system, each service will do a specific task.
@@ -42,6 +43,9 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
 - [ ] [Object Detection API TF2](https://github.com/tensorflow/models/tree/master/research/object_detection)
 - [ ] [DERT](https://arxiv.org/pdf/2005.12872.pdf)
 
+### Deep Labelling for Semantic Image Segmentation
+- [X] [DeepLab](https://github.com/tensorflow/models/tree/master/research/deeplab)
+
 ### Image Captioning
 1) Mutli Task : https://www.ijcai.org/Proceedings/2018/0168.pdf (paper), https://github.com/andyweizhao/Multitask_Image_Captioning (code)
 2) https://www.tensorflow.org/tutorials/text/image_captioning
@@ -59,6 +63,10 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
   - [deepface tutorial](https://sefiks.com/2020/09/09/deep-face-detection-with-mtcnn-in-python/)
 
 ### OCR
+- [] [EAST](https://github.com/argman/EAST)
+- [] [Keras OCR](https://pypi.org/project/keras-ocr/)
+- [] [Tesseract](https://pypi.org/project/pytesseract/)
+- [] [Textractor](https://github.com/danwald/pytextractor)
 
 ### Detect image properties
 https://github.com/tensorflow/models/tree/master/research/delf#delg
