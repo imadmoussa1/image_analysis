@@ -46,7 +46,8 @@ import glob
 # faces_folder_path = sys.argv[3]
 # output_folder_path = sys.argv[4]
 
-predictor_path = "pretrained_model/shape_predictor_5_face_landmarks.dat"
+predictor_path = "pretrained_model/shape_predictor_68_face_landmarks.dat"
+cnn_face_dector_path = "pretrained_model/mmod_human_face_detector.dat"
 face_rec_model_path = "pretrained_model/dlib_face_recognition_resnet_model_v1.dat"
 faces_folder_path = "test_data"
 output_folder_path = "new_data"
@@ -56,6 +57,7 @@ output_folder_path = "new_data"
 # to find face landmarks so we can precisely localize the face, and finally the
 # face recognition model.
 detector = dlib.get_frontal_face_detector()
+cnn_face_detector = dlib.cnn_face_detection_model_v1(cnn_face_dector_path)
 sp = dlib.shape_predictor(predictor_path)
 facerec = dlib.face_recognition_model_v1(face_rec_model_path)
 
@@ -75,18 +77,32 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
   # Ask the detector to find the bounding boxes of each face. The 1 in the
   # second argument indicates that we should upsample the image 1 time. This
   # will make everything bigger and allow us to detect more faces.
+  cnn_face_detector_check = False
+
   dets = detector(img, 1)
   print("Number of faces detected: {}".format(len(dets)))
 
+  if len(dets) == 0 :
+    cnn_face_detector_check = True
+    print("use cnn face detector")
+    dets = cnn_face_detector(img, 1)
+    print("Number of faces detected: {}".format(len(dets)))
+
   # Now process each face we found.
   for k, d in enumerate(dets):
-    print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
-        k, d.left(), d.top(), d.right(), d.bottom()))
     # Get the landmarks/parts for the face in box d.
-    shape = sp(img, d)
-
+    if cnn_face_detector_check:
+      print("Detection {}: Left: {} Top: {} Right: {} Bottom: {} Confidence: {}".format(k, d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom(), d.confidence))
+      shape = sp(img, d.rect)
+      rects = dlib.rectangles()
+      rects.extend([d.rect for d in dets])
+      win.add_overlay(rects)
+    else:
+      print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(k, d.left(), d.top(), d.right(), d.bottom()))
+      shape = sp(img, d)
+      win.add_overlay(d)
+    print("Part 0: {}, Part 1: {} ...".format(shape.part(0), shape.part(1)))
     # Draw the face landmarks on the screen so we can see what face is currently being processed.
-    win.add_overlay(d)
     win.add_overlay(shape)
     # Compute the 128D vector that describes the face in img identified by
     # shape.
@@ -94,7 +110,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
     descriptors.append(face_descriptor)
     img_name = os.path.basename(f).replace(".jpg", "")
     images.append((img, shape, img_name))
-  win.add_overlay(dets)
+  # win.add_overlay(dets)
   # dlib.hit_enter_to_continue()
 
 # Now let's cluster the faces.
