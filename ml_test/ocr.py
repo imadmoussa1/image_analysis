@@ -1,3 +1,17 @@
+# Bad Accuracy for Text detection
+
+# OCR
+# sudo apt-get update
+# sudo apt-get install libleptonica-dev
+# sudo apt-get install tesseract-ocr
+# sudo apt-get install libtesseract-dev
+# tesseract
+# tesseract-ocr
+# imutils==0.5.2
+# Pillow==6.2.2
+# pytesseract==0.2.6
+# requests==2.22.0
+
 from PIL import Image
 
 import time
@@ -14,25 +28,15 @@ from imutils.object_detection import non_max_suppression
 
 class PyTextractor:
   layer_names = ('feature_fusion/Conv_7/Sigmoid', 'feature_fusion/concat_3',)
+  blob_from_img_near = 130  # (123.68, 116.78, 103.94)
 
   def __init__(self):
     self.east = 'pretrained_model/frozen_east_text_detection.pb'
     self._load_assets()
 
-  def get_image_text(self,
-                     image,
-                     width=320,
-                     height=320,
-                     display=False,
-                     numbers=True,
-                     confidence=0.5,
-                     percentage=2.0,
-                     min_boxes=1,
-                     max_iterations=20):
+  def get_image_text(self,image,width=320,height=320, display=True, numbers=True, confidence=0.5, percentage=0.0, min_boxes=1, max_iterations=40):
     loaded_image = self._load_image(image)
-    image, width, height, ratio_width, ratio_height = self._resize_image(
-        loaded_image, width, height
-    )
+    image, width, height, ratio_width, ratio_height = self._resize_image(loaded_image, width, height)
     scores, geometry = self._compute_scores_geometry(image, width, height)
     (num_rows, num_cols) = scores.shape[2:4]
 
@@ -41,9 +45,7 @@ class PyTextractor:
     end = time.time()
     print('Found {boxes} ROIs {seconds:.6f} seconds'.format(boxes=len(boxes), seconds=(end - start)))
 
-    return self._extract_text(
-        loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height
-    )
+    return self._extract_text(loaded_image, boxes, percentage, display, numbers, ratio_width, ratio_height)
 
   def _load_image(self, image):
     return cv2.imread(image)
@@ -64,7 +66,7 @@ class PyTextractor:
     # construct a blob from the image and then perform a forward pass of
     # the model to obtain the two output layer sets
     blob = cv2.dnn.blobFromImage(
-        image, 1.0, (width, height), (123.68, 116.78, 103.94), swapRB=True, crop=False
+        image, 1.0, (width, height), self.blob_from_img_near, swapRB=True, crop=False
     )
     start = time.time()
     self.east_net.setInput(blob)
@@ -160,7 +162,7 @@ class PyTextractor:
       ROIImage = image.copy()[start_Y:end_Y, start_X:end_X]
       config = '--psm 6' if numbers else ''
       extracted_text.append(pytesseract.image_to_string(ROIImage, config=config))
-      print(extracted_text)
+
       # if display:
       #   cv2.imshow('SubImage', ROIImage)
 
@@ -173,5 +175,7 @@ class PyTextractor:
 
 
 extractor = PyTextractor()
-for text in extractor.get_image_text('test_data/n_1.jpg'):
+for text in extractor.get_image_text('test_data/t_2.jpg'):
+  print(text)
+for text in extractor.get_image_text('test_data/a1.png'):
   print(text)
