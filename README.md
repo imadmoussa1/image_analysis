@@ -10,41 +10,52 @@ And save them to a DB
 6) [X] [Face Clustering](Face-Clustering)
 5) [X] [Face Recognition](#Face-recognition)
 7) [X] [OCR](#OCR)
-8) [ ] Reverse Image search
 3) [ ] [Detect image properties](#Detect-image-properties)
-1) [ ] [Assign general image attributes](#Assign-general-image-attributes)
+1) [ ] [Detect Labels](#Assign-general-image-attributes)
+8) [ ] [Landmark Detection](#Landmark-Detection)
+9) [ ] [Pose Estimation](#pose-estimation)
+8) [ ] Reverse Image search
 
 ## System
 A micro service system, each service will do a specific task.
 we are using:
 1) GRPC
 2) docker
-3) Tensorflow serving
+3) TFX
 4) Python
 5) Mongodb
 
-## Store Image
+### Store Image
 Save image and meta data in mongo DB
 
 Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sending-image-meta-data
 
-## GRPC
+### GRPC
 - [GRPC](https://grpc.io/docs/languages/python/quickstart/)
 
 ## Options
-1) Multi-task learning
-2) Many models
+1) [ ] Multi-task learning
+2) [X] Different Pre-trained models
 
+## Production
+## Machine Learning Pipelines
+- [ ] TFX
+- [ ] Apache Beam
+
+## Orchestrations
+- [] Apache Airflow
+- [] KubeFlow
 
 ## Models
 ### Object Detection
 - [ ] [YOLOv4](https://github.com/AlexeyAB/darknet)
-- [X] [tensorflow yolov4](https://github.com/hunglc007/tensorflow-yolov4-tflite)
-- [ ] [Object Detection API TF2](https://github.com/tensorflow/models/tree/master/research/object_detection)
+- [ ] [tensorflow yolov4](https://github.com/hunglc007/tensorflow-yolov4-tflite)
+- [X] [Object Detection API TF2](https://github.com/tensorflow/models/tree/master/research/object_detection)
 - [ ] [DERT](https://arxiv.org/pdf/2005.12872.pdf)
 
 ### Deep Labelling for Semantic Image Segmentation
 - [X] [DeepLab](https://github.com/tensorflow/models/tree/master/research/deeplab)
+- [ ] [SOLO](https://github.com/WXinlong/SOLO)
 
 ### Image Captioning
 1) Mutli Task : https://www.ijcai.org/Proceedings/2018/0168.pdf (paper), https://github.com/andyweizhao/Multitask_Image_Captioning (code)
@@ -63,27 +74,26 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
   - [deepface tutorial](https://sefiks.com/2020/09/09/deep-face-detection-with-mtcnn-in-python/)
 
 ### OCR
-- [] [EAST](https://github.com/argman/EAST)
-- [] [Keras OCR](https://pypi.org/project/keras-ocr/)
-- [] [Tesseract](https://pypi.org/project/pytesseract/)
-- [] [Textractor](https://github.com/danwald/pytextractor)
+- [ ] [EAST](https://github.com/argman/EAST)
+- [X] [Keras OCR](https://pypi.org/project/keras-ocr)
+- [ ] [Tesseract](https://pypi.org/project/pytesseract)
+- [ ] [Textractor](https://github.com/danwald/pytextractor)
+- [ ] [PSNET](https://pypi.org/project/psenet-text-detector)
 
 ### Detect image properties
 https://github.com/tensorflow/models/tree/master/research/delf#delg
 
+### Detect Labels
 
-### Assign general image attributes
+### Landmark Detection
+
+### Pose Estimation
 
 ## Datasets
 
 ### Test Data set
-based on Celebrity in places we chosen images of this celebrities:
-  - [x] Taylor hill
-  - [x] Zac Efron
-  - [x] Zayn Malek
-  - [x] random 1
-  - [x] random 2
-To test the pertained model before using them in our system,
+based on Celebrity in places we chosen images of this celebrities, also image from social media to generate a
+small data set, To test the pertained model before using them in our system.
 
 ### Public Data Set
 - [ ] [MS-Celeb-1M](https://academictorrents.com/details/9e67eb7cc23c9417f39778a8e06cca5e26196a97/tech&hit=1&filelist=1)
