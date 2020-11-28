@@ -47,7 +47,10 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
 - [] KubeFlow
 
 ## Models
+All pertained model should be downloaded and unzipped in the `pretrained_model` folder
+
 ### Object Detection
+[details](objects/README.md)
 - [ ] [YOLOv4](https://github.com/AlexeyAB/darknet)
 - [ ] [tensorflow yolov4](https://github.com/hunglc007/tensorflow-yolov4-tflite)
 - [X] [Object Detection API TF2](https://github.com/tensorflow/models/tree/master/research/object_detection)
@@ -86,6 +89,8 @@ https://github.com/tensorflow/models/tree/master/research/delf#delg
 ### Detect Labels
 
 ### Landmark Detection
+[details](Landmarks/README.md)
+- [X] [DELF](https://github.com/tensorflow/models/tree/master/research/delf)
 
 ### Pose Estimation
 
