@@ -11,8 +11,8 @@ And save them to a DB
 5) [X] [Face Recognition](#Face-recognition)
 7) [X] [OCR](#OCR)
 3) [ ] [Detect image properties](#Detect-image-properties)
-1) [ ] [Detect Labels](#Assign-general-image-attributes)
-8) [ ] [Landmark Detection](#Landmark-Detection)
+1) [X] [Detect Labels](#Assign-general-image-attributes)
+8) [X] [Landmark Detection](#Landmark-Detection)
 9) [ ] [Pose Estimation](#pose-estimation)
 8) [ ] Reverse Image search
 
@@ -87,8 +87,10 @@ All pertained model should be downloaded and unzipped in the `pretrained_model` 
 https://github.com/tensorflow/models/tree/master/research/delf#delg
 
 ### Detect Labels
+Using the object detection with Model trained on OID v4 data set
 
 ### Landmark Detection
+No dataset with name: Landmark are only ID
 [details](Landmarks/README.md)
 - [X] [DELF](https://github.com/tensorflow/models/tree/master/research/delf)
 
@@ -101,7 +103,10 @@ based on Celebrity in places we chosen images of this celebrities, also image fr
 small data set, To test the pertained model before using them in our system.
 
 ### Public Data Set
-- [ ] [MS-Celeb-1M](https://academictorrents.com/details/9e67eb7cc23c9417f39778a8e06cca5e26196a97/tech&hit=1&filelist=1)
-- [ ] [VGGFace2](http://zeus.robots.ox.ac.uk/vgg_face2/)
-- [x] [Celebrity In Places](http://www.robots.ox.ac.uk/~vgg/data/celebrity_in_places/)
-- [ ] [Celebrity Together](http://www.robots.ox.ac.uk/~vgg/data/celebrity_together/)
+- [MS-Celeb-1M](https://academictorrents.com/details/9e67eb7cc23c9417f39778a8e06cca5e26196a97/tech&hit=1&filelist=1)
+- [VGGFace2](http://zeus.robots.ox.ac.uk/vgg_face2/)
+- [Celebrity In Places](http://www.robots.ox.ac.uk/~vgg/data/celebrity_in_places/)
+- [Celebrity Together](http://www.robots.ox.ac.uk/~vgg/data/celebrity_together/)
+- [COCO Dataset](https://cocodataset.org/#home)
+- [Open Images OID](https://storage.googleapis.com/openimages/web/index.html)
+- [The Oxford Buildings Dataset](https://www.robots.ox.ac.uk/~vgg/data/oxbuildings/s)
