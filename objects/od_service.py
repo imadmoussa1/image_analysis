@@ -79,15 +79,25 @@ def show_inference(model, image_path):
       instance_masks=output_dict.get('detection_masks_reframed', None),
       use_normalized_coordinates=True,
       line_thickness=8)
+  image_labeles = set()
+  for i in range(len(output_dict['detection_classes'])):
+    detection_classes = output_dict['detection_classes'][i]
+    detection_scores = output_dict['detection_scores'][i]
+    category_class = category_index[detection_classes]['name']
+    if detection_scores > 0.2:
+      image_labeles.add(category_class)
+      # print(category_class, detection_scores)
 
   # display(Image.fromarray(image_np))
   img = Image.fromarray(image_np)
   # save a image using extension
   model_folder = "new_data/"+model_name
+  image_name = os.path.basename(image_path)
   if not os.path.isdir(model_folder):
     os.makedirs(model_folder)
-  img_name = model_folder+"/"+ os.path.basename(image_path)
-  img.save(img_name)
+  img_path = model_folder+"/"+ image_name
+  img.save(img_path)
+  print(image_name, image_labeles)
   # img.show()
 
 # List of the strings that is used to add correct label for each box.
