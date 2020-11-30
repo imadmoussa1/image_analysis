@@ -23,7 +23,7 @@ we are using:
 2) docker
 3) TFX
 4) Python
-5) Mongodb
+5) elastic
 
 ### Store Image
 Save image and meta data in mongo DB
@@ -43,8 +43,8 @@ Send Image via grpc https://stackoverflow.com/questions/62171037/grpc-python-sen
 - [ ] Apache Beam
 
 ## Orchestrations
-- [] Apache Airflow
-- [] KubeFlow
+- [ ] Apache Airflow
+- [ ] KubeFlow
 
 ## Models
 All pertained model should be downloaded and unzipped in the `pretrained_model` folder
