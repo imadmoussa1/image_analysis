@@ -4,7 +4,7 @@ import json
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 
-from objects.b_od import ObjectBox
+from objects.obj_detection_do import DetectionClasses
 
 
 class MyOptions(PipelineOptions):
@@ -29,8 +29,8 @@ p = beam.Pipeline(options=options)
 
 my_options = options.view_as(MyOptions)
 
-d5_model = ObjectBox('efficientdet_d5_coco17_tpu-32', 'label_map/mscoco_complete_label_map.pbtxt')
-oid_model = ObjectBox("mask_rcnn_inception_resnet_v2_1024x1024_coco17_gpu-8", "label_map/mscoco_complete_label_map.pbtxt")
+d5_model = DetectionClasses('efficientdet_d5_coco17_tpu-32', 'label_map/mscoco_complete_label_map.pbtxt')
+oid_model = DetectionClasses("mask_rcnn_inception_resnet_v2_1024x1024_coco17_gpu-8", "label_map/mscoco_complete_label_map.pbtxt")
 
 read_image = (
     p |
