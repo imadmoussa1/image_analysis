@@ -9,3 +9,4 @@ test_data
 .vscode/
 __pycache__
 downloads
+airflow
