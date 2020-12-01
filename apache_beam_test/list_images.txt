@@ -1,3 +1,5 @@
 test_data/ny.jpg
-test_data/y_2.jpg
-test_data/n_1.jpg
+test_data/paris_1.jpg
+test_data/t_2.jpg
+test_data/n_2.jpg
+test_data/y_1.jpg
