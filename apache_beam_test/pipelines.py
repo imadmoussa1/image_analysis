@@ -21,10 +21,10 @@ class MyOptions(PipelineOptions):
 
 
 def flaten_dict_list(element):
-  print(element[1])
+#   print(element[1])
   labels_flat = sum(element[1]["labels"], [])
   landmark_flat = element[1]["landmark"]
-  text_flat = element[1]["text"]
+  text_flat = sum(element[1]["text"], [])
   return (element[0], {'labels': labels_flat,'text': text_flat, "landmark": landmark_flat})
 
 
