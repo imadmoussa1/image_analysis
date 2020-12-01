@@ -5,7 +5,8 @@ import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 
 from objects.obj_detection_do import DetectionClasses
-
+from landmarks.landmark_check_do import LandmarkCheck
+from ocr.text_detection_do import TextDetection
 
 class MyOptions(PipelineOptions):
 
@@ -19,10 +20,13 @@ class MyOptions(PipelineOptions):
     #                     default='./output/')
 
 
-# class Split(beam.DoFn):
-#   def process(self, element):
-#     print(element)
-#     return [{'image_name': str(element)}]
+def flaten_dict_list(element):
+  print(element[1])
+  labels_flat = sum(element[1]["labels"], [])
+  landmark_flat = element[1]["landmark"]
+  text_flat = element[1]["text"]
+  return (element[0], {'labels': labels_flat,'text': text_flat, "landmark": landmark_flat})
+
 
 options = PipelineOptions()
 p = beam.Pipeline(options=options)
@@ -30,7 +34,10 @@ p = beam.Pipeline(options=options)
 my_options = options.view_as(MyOptions)
 
 d5_model = DetectionClasses('efficientdet_d5_coco17_tpu-32', 'label_map/mscoco_complete_label_map.pbtxt')
-oid_model = DetectionClasses("mask_rcnn_inception_resnet_v2_1024x1024_coco17_gpu-8", "label_map/mscoco_complete_label_map.pbtxt")
+# mask_model = DetectionClasses("mask_rcnn_inception_resnet_v2_1024x1024_coco17_gpu-8", "label_map/mscoco_complete_label_map.pbtxt")
+oid_model = DetectionClasses("ssd_mobilenet_v2_oid_v4_2018_12_12", "label_map/oid_v4_label_map.pbtxt")
+landmark_check = LandmarkCheck()
+text_detection = TextDetection()
 
 read_image = (
     p |
@@ -40,38 +47,57 @@ read_image = (
 d5_pcollection = (
     read_image
     | "d5" >> beam.ParDo(d5_model)
-    # | 'd5 output' >> beam.Map(json.dumps)
-    # | beam.Map(print)
 )
+
+# mask_pcollection = (
+#     read_image
+#     | "mask" >> beam.ParDo(mask_model)
+# )
 
 oid_pcollection = (
     read_image
     | "oid" >> beam.ParDo(oid_model)
-    # | 'oid output' >> beam.Map(json.dumps)
-    # | beam.Map(print)
 )
 
-merged = (
+merged_labels = (
+    # (d5_pcollection, mask_pcollection, oid_pcollection)
     (d5_pcollection, oid_pcollection)
     | 'MergedPColl' >> beam.Flatten()
 )
 
-# merged = p | beam.Create([
-#     ('The-Eiffel-Tower-paris.jpg', ['truck', 'motorcycle', 'bus', 'person', 'car']),
-#     ('The-Eiffel-Tower-paris.jpg', ['person', 'car', 'bus']),
-#     ('ny.jpg', ['person']),
-#     ('y_2.jpg', ['handbag', 'person', 'tv']),
-#     ('y_2.jpg', ['chair', 'person']),
-#     ('n_1.jpg', ['cell phone', 'person', 'clock', 'handbag']),
-#     ('n_1.jpg', ['handbag', 'potted plant', 'clock', 'tie', 'person', 'cell phone'])
-# ])
+# face_check = (
+#     merged_labels
+#     | beam.GroupByKey()
+#     | beam.CombineValues(lambda values: list(set(sum(values, []))))
+#     | "face_detection" >> beam.ParDo(landmark_check)
+# )
 
-join = (
-    merged
-    | beam.GroupByKey()
-    | beam.CombineValues(lambda values: list(set(sum(values, []))))
+landmark_pcollection = (
+    read_image
+    | "landmark" >> beam.ParDo(text_detection)
+)
+
+text_pcollection = (
+    read_image
+    | "text" >> beam.ParDo(landmark_check)
+)
+
+last = (
+    ({'labels': merged_labels, 'text': text_pcollection,'landmark': landmark_pcollection})
+    | beam.CoGroupByKey()
+    | beam.Map(flaten_dict_list)
     | beam.Map(print)
 )
+
+# merged = (
+#     p
+#     | beam.Create([
+#         ('ny', {'labels': [['person']], 'landmark': [0.9]}),
+#         ('paris_1', {'labels': [['Tower'], ['person', 'car', 'bus', 'truck']], 'landmark': [0.9]}),
+#         ('n_2', {'labels': [['Human face'], ['person']], 'landmark': []}),
+#         ('y_1', {'labels': [['Woman', 'Clothing', 'Human face', 'Dress'], ['cup', 'cell phone', 'person', 'bottle']], 'landmark': []})
+#     ])
+# )
 
 # beam.io.WriteToText("a.json")
 p.run()

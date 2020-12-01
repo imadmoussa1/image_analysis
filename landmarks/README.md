@@ -13,3 +13,5 @@ Using Docker
 ## Model used
 - [GLDv2](https://github.com/tensorflow/models/blob/master/research/delf/delf/python/google_landmarks_dataset/README.md)
 - [landmark detection](https://github.com/tensorflow/models/blob/master/research/delf/DETECTION.md)
+- [X] d2r_mnetssd_20190411 , better accuracy than frcnn
+- [ ] d2r_frcnn_20190411

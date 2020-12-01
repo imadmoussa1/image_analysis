@@ -150,7 +150,8 @@ def main(unused_argv):
                                                    scores_out[0],
                                                    class_indices_out[0],
                                                    detector_thresh)
-    print(class_indices_out[0])
+    if len(selected_scores) > 0:
+      print(selected_scores[0])
     box_io.WriteToFile(out_boxes_fullpath, selected_boxes, selected_scores, selected_class_indices)
     if output_viz_dir:
       out_viz_filename = base_boxes_filename + _VIZ_SUFFIX
@@ -158,9 +159,9 @@ def main(unused_argv):
       _PlotBoxesAndSaveImage(im[0], selected_boxes, out_viz_fullpath)
 
 if __name__ == '__main__':
-  detector_path = 'pretrained_model/d2r_frcnn_20190411'
+  detector_path = 'pretrained_model/d2r_mnetssd_20190411'
   detector_thresh = 0.8
-  list_images_path = "landmarks/list_images.txt"
-  output_dir = "new_data/oxford5k_boxes"
-  output_viz_dir = 'new_data/oxford5k_boxes_vi'
+  list_images_path = "apache_beam_test/list_images.txt"
+  output_dir = "new_data/frcnn_boxes"
+  output_viz_dir = 'new_data/frcnn_boxes_vi'
   app.run(main=main)

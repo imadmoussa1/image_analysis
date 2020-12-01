@@ -57,12 +57,12 @@ class DetectionClasses(beam.DoFn):
 
     return output_dict
 
-  def show_inference(self, model, image_path):
+  def show_inference(self, image_path):
     # the array based representation of the image will be used later in order to prepare the
     # result image with boxes and labels on it.
     image_np = np.array(Image.open(image_path))
     # Actual detection.
-    output_dict = self.run_inference_for_single_image(model, image_np)
+    output_dict = self.run_inference_for_single_image(self.model, image_np)
     # Visualization of the results of a detection.
     vis_util.visualize_boxes_and_labels_on_image_array(
         image_np,
@@ -78,7 +78,7 @@ class DetectionClasses(beam.DoFn):
       detection_classes = output_dict['detection_classes'][i]
       detection_scores = output_dict['detection_scores'][i]
       category_class = self.category_index[detection_classes]['name']
-      if detection_scores > 0.2:
+      if detection_scores > 0.4:
         image_labels.add(category_class)
         # print(category_class, detection_scores)
 
@@ -92,6 +92,7 @@ class DetectionClasses(beam.DoFn):
     img_path = model_folder+"/" + image_name
     img.save(img_path)
     # print(image_name, image_labels)
+    image_name = image_name.replace(".jpg", "")
     if image_labels:
       return [(image_name, list(image_labels))]
     # img.show()
@@ -99,4 +100,4 @@ class DetectionClasses(beam.DoFn):
   def process(self, element):
     if not self.model:
       self.model = self.load_model()
-    return self.show_inference(self.model, element)
+    return self.show_inference(element)
