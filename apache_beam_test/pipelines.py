@@ -74,12 +74,12 @@ merged_labels = (
 
 landmark_pcollection = (
     read_image
-    | "landmark" >> beam.ParDo(text_detection)
+    | "landmark" >> beam.ParDo(landmark_check)
 )
 
 text_pcollection = (
     read_image
-    | "text" >> beam.ParDo(landmark_check)
+    | "text" >> beam.ParDo(text_detection)
 )
 
 last = (
